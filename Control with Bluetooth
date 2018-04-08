@@ -1,0 +1,109 @@
+# The below code is designed to control the Abel 2.0 rover's drive system via Bluetooth + Raspberry pi.  
+# You will need a raspberry pi with a bluetooth 4.0 module connected to it. You will also need a wii remote to control via bluetooth.
+
+# Once your raspberry pi's GPIO pins are wired up to control the drive motors, ensure the Bluetooth module is activated and run code:
+
+#####################################################################################################################################
+
+import cwiid 
+import time
+
+import RPi.GPIO as gpio
+
+gpio.cleanup()
+
+# initialize motor pins
+gpio.setmode(gpio.BOARD) 
+
+gpio.setup(19, gpio.OUT)
+gpio.setup(21, gpio.OUT)
+gpio.setup(24, gpio.OUT)
+gpio.setup(26, gpio.OUT)
+
+#connecting to the wiimote. This allows several attempts
+# as first few often fail.
+print 'Press 1+2 on your Wiimote now...' 
+wm = None 
+i=2 
+while not wm:
+	try:
+		wm=cwiid.Wiimote()
+	except RuntimeError:
+		if (i>5):
+			print("cannot create connection")
+			quit()
+		print "Error opening wiimote connection"
+		print "attempt " + str(i)
+		i +=1
+#set wiimote to report button presses and accelerometer state
+wm.rpt_mode = cwiid.RPT_BTN 
+#turn on led to show connected
+wm.led = 1
+#activate the servos
+#print state every second
+
+
+while True:
+	buttons = wm.state['buttons']
+#1 Drive Wheels
+	if (buttons & cwiid.BTN_RIGHT):
+		print("forward")
+		gpio.output(19, True)
+		gpio.output(26, True)
+		time.sleep(.2)
+	if (buttons & cwiid.BTN_RIGHT) == False:
+		gpio.output(19, False)
+		gpio.output(26, False)
+#2
+        if (buttons & cwiid.BTN_LEFT):
+                print("backward")
+                gpio.output(24, True)
+		gpio.output(21, True)
+		time.sleep(.2)
+	if (buttons & cwiid.BTN_LEFT) == False:
+                gpio.output(24, False)
+                gpio.output(21, False)
+#3
+        if (buttons & cwiid.BTN_DOWN):
+                print("right!")
+                gpio.output(19, True)
+                gpio.output(24, True)
+		time.sleep(.2)
+	if (buttons & cwiid.BTN_DOWN) == False:
+                gpio.output(19, False) 
+		gpio.output(24, False)
+#4
+	if (buttons & cwiid.BTN_UP):
+                print("left!")
+                gpio.output(21, True)
+ 		gpio.output(26, True)
+		time.sleep(.2)
+	if (buttons & cwiid.BTN_UP) == False:
+		gpio.output(21, False)
+		gpio.output(26, False)
+
+#5 Drive Weapon
+	if (buttons & cwiid.BTN_A):
+		gpio.output(19, False)
+		gpio.output(21, False)
+		gpio.output(24, False)
+		gpio.output(26, False)
+	if (buttons & cwiid.A) == False:
+		gpio.output(21, False)
+		gpio.output(26, False)
+#6
+	if (buttons & cwiid.BTN_B):
+		gpio.output(19, False)
+		gpio.output(21, False)
+		gpio.output(24, False)
+		gpio.output(26, False)
+	if (buttons & cwiid.B) == False:
+		gpio.output(21, False)
+		gpio.output(26, False)
+#7 Disable all
+	if (buttons & cwiid.BTN_HOME):
+		gpio.output(19, False)
+		gpio.output(21, False)
+		gpio.output(24, False)
+		gpio.output(26, False)
+		gpio.cleanup()
