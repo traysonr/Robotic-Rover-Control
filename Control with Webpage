@@ -1,4 +1,4 @@
-# The code in this page is to be implemented with an apache webserver and the raspberry pi.
+# The code in this page is to be implemented with an apache webserver and the raspberry pi. You will create an HTML file and CGI scrips.
 
 # Multiple segments of code work together to drive the Rover's drive system via webpage thru use of local cgi-scripts and javascript.
 # You will need a raspberry with a wifi adapter plugged into it. You will also need a laptop/PC to control the webpage via web browser:
