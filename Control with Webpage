@@ -1,0 +1,64 @@
+# The code in this page is to be implemented with an apache webserver and the raspberry pi.
+
+# Multiple segments of code work together to drive the Rover's drive system via webpage thru use of local cgi-scripts and javascript.
+# You will need a raspberry with a wifi adapter plugged into it. You will also need a laptop/PC to control the webpage via web browser:
+
+# Ensure that your .html file and cgi scripts are in the correct directories and launch your apache webserver.
+# You can now access your control interface on your external laptop by typing the raspberry pi's IP address in the address bar:
+
+#####################################################################################################################################
+ 
+ 
+The HTML PAGE (Be sure to save the following as /var/www/index.html):
+
+<html>
+<head>
+<script Language="Javascript">
+function set0()
+{
+    document.location="cgi-bin/set0.cgi";
+}
+function set1()
+{
+    document.location="cgi-bin/set1.cgi";
+}
+function set01()
+{
+    document.location="cgi-bin/set01.cgi";
+}
+function clear01(event)
+{
+    document.location="cgi-bin/clear01.cgi";
+}
+</script>
+</head>
+<body>
+    <div style="text-align:center">
+    <h1>Raspberry Pi GPIO</h1>
+
+    <img src="/forward.jpg" id="f" onmousedown="set01()" onmouseup="clear01(event)">
+<br>
+    <img src="/left.jpg" id="l" onmousedown="set0()" onmouseup="clear01(event)">
+    <img src="/right.jpg" id="r" onmousedown="set1()" onmouseup="clear01(event)">
+<br>
+    <img src="/stop.jpg" id="s" onmousedown="clear01(event)" onmouseup="clear01(event)">
+    </div>
+
+</body>
+</html>
+
+#####################################################################################################################################
+
+ The GENERAL FORMAT OF THE CGI SCRIPTS (Make an instance that makes the GPIO pins drive the vehichle forward,back,left,right.):
+ 
+ #!/bin/bash
+gpio -p write 201 1
+echo "Status: 204 No Content"
+echo "Content-type: text/plain"
+echo ""
+
+Note that the -p option needs to be used when you're working with Pi Face. Otherwise use -g for regular GPIO pinout names.
+
+######################################################################################################################################
+######################################################################################################################################
+If you go to your Pi's IP address in your browser, you should see the web UI.
