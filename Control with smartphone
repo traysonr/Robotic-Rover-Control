@@ -1,0 +1,63 @@
+# This code is written for the arduino microcontroller.  Make sure you save it with the extension, ".ino".
+
+# The below code is designed to control the Abel 2.0 rover's drive system via Arduino + hc05 bluetooth module.  
+# You will need an arduino with a hc05 BT module wired to it. You will also need a smartphone with bluetooth and the following app:
+https://play.google.com/store/apps/details?id=com.heightdev.arduinobtjoysticklite.
+
+# Once your arduino's GPIO pins are wired up to control the drive motors, run the code and connect your phone via bluetooth:
+
+#####################################################################################################################################
+
+
+
+//ARMS
+  const int lightsA  = 12;
+  const int lightsB  = 13;
+
+//Bluetooth (HC-06 JY-MCU) State pin on pin 2 of Arduino
+  const int BTState = 2;
+
+  int state;
+
+void setup() {
+    // Set pins as outputs:
+
+    pinMode(lightA, OUTPUT); 
+    pinMode(lightB, OUTPUT); 
+
+    pinMode(BTState, INPUT);    
+    // Initialize serial communication at 9600 bits per second:
+    Serial.begin(9600);
+}
+ 
+void loop() {
+  //Stop car when connection lost or bluetooth disconnected
+   //  if(digitalRead(BTState)==LOW) { state='S'; }
+
+  //Save income data to variable 'state'
+    if(Serial.available() > 0){     
+      state = Serial.read();   
+    }
+
+  //If state is equal with letter 'S', stop the car
+//    if (state == '5'){
+//      analogWrite(leftA, 0);  analogWrite(rightA, 0); 
+//      digitalWrite(leftB, LOW);  digitalWrite(rightB, LOW); 
+//    }
+    
+
+  /************************ARMS DOWN*****************************/
+  //If state is equal with letter 'W', turn leds on or of off
+    else if (state == '9') {
+      digitalWrite(lightsB, HIGH);
+    }
+
+  /************************STOP ARMS*****************************/
+  //If state is equal with letter 'W', turn leds on or of off
+    else if (state == 'A') {
+      digitalWrite(lightB, LOW); 
+    }
+  /************************Stop*****************************/
+}
+
+
