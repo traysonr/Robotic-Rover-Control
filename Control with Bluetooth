@@ -1,3 +1,4 @@
+# This code is written for the Raspberry pi microcontroller.  Make sure you save it with the python extension, ".py".
 # The below code is designed to control the Abel 2.0 rover's drive system via Bluetooth + Raspberry pi.  
 # You will need a raspberry pi with a bluetooth 4.0 module connected to it. You will also need a wii remote to control via bluetooth.
 
